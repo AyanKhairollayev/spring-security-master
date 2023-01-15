@@ -16,22 +16,11 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/success").authenticated())
+                .authorizeHttpRequests((requests) -> requests.requestMatchers("/success").hasRole("USER_ROLE"))
                 .formLogin().defaultSuccessUrl("/success", true)
                 .and()
                 .httpBasic()
                 .and()
                 .build();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("123")
-                .roles("USER_ROLE")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
     }
 }
