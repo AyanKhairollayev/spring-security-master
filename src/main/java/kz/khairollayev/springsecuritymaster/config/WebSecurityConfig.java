@@ -12,12 +12,14 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf().disable()
                 .authorizeHttpRequests((requests) ->
-                        requests.requestMatchers("/success").hasRole("USER_ROLE")
+                        requests.anyRequest().authenticated()
                 )
-                .formLogin().defaultSuccessUrl("/success", true)
-                .and()
-                .httpBasic()
+                .formLogin()
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/afterLogin/success")
+                .failureForwardUrl("/afterLogin/failure")
                 .and()
                 .build();
     }
